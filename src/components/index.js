@@ -1,3 +1,4 @@
 import Header from './Header';
 import Footer from './Footer';
-export { Header, Footer };
+import Product from './Product';
+export { Header, Footer,Product };

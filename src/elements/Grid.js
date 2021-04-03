@@ -70,7 +70,8 @@ const ParentsGridbox = styled.div`
   ${(props) => (props.margin ? `margin:${props.margin}` : '')};
   ${(props) => (props.bg ? `background-color:${props.bg}` : '')};
   display: grid;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(3,308px);
+  grid-column-gap: 24px;
   align-items: center;
   `
 export default Grid;

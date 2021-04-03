@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import styled from 'styled-components';
-import { Text, Grid, Button } from "../elements";
-
+import { Text, Grid } from "../elements";
+import { Product } from "../components";
+import {RESP} from '../shared/response';
 const ProductList = (props) => {
   
+  const productItem = RESP.PRODUCTS.result;
+  console.log(productItem);
   
   return (
     <React.Fragment>
       <Grid padding="50px 30px">
         <Text size="14px" color="#000000">베스트</Text>
         <Grid  flex padding="0px 10px">
-          <Text size="12px" margin="0px" color="#5f0080">전체보기</Text>
+          <Text size="12px" margin="10px 0px 0px 0px" color="#5f0080">전체보기</Text>
           <DropDown>
             <SortText className="dropbtn">신상품순</SortText>
             <DropDownContent className="dropdown-content">
@@ -20,10 +23,17 @@ const ProductList = (props) => {
             </DropDownContent>
         </DropDown>
         </Grid>
-        <Grid bg="beige">
+         <Grid gridBox margin="25px 0px">
+          
+          {productItem.map((p, idx) => {
+          
+            return (
+              <Product {...p} key={p.id}/>
+            )
 
+          })}
+          
         </Grid>
-
       </Grid>
     </React.Fragment>
   )
@@ -38,6 +48,8 @@ const SortText = styled.button`
   background-color: white;
   font-size: 12px;
   cursor: pointer;
+  margin-right: 10px;
+  font-weight:400;
   &:hover{
     color:#5f0080;
   }
@@ -71,7 +83,7 @@ const DropDownContent = styled.div`
   display: none;
   text-align: right;
   position: absolute;
-  top:26px;
+  top:25px;
   left:-15px;
   background-color: white;
   width:90px;
