@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Button = (props) => {
   
-  const { text, _onClick, children, margin, width, padding, bg, color, disabled } = props;
+  const { text, _onClick, children, margin, width, padding, bg, color, disabled,borderColor,size,bold } = props;
 
   const styles = {
     margin: margin,
@@ -11,7 +11,9 @@ const Button = (props) => {
     padding: padding,
     bg: bg,
     color: color,
-   
+    borderColor: borderColor,
+    size: size,
+    bold: bold,
   }
 
   return (
@@ -32,6 +34,9 @@ Button.defaultProps = {
   bg: '#5f0081',
   color: 'white',
   disabled: false,
+  borderColor: '1px solid #5f0081',
+  size: '16px',
+  bold: false,
  
 }
 
@@ -41,11 +46,12 @@ const BasicButton = styled.button`
   background-color: ${(props) => props.bg};
   color:${(props) => props.color};
   padding:${(props) => props.padding};
-  border: 1px solid #5f0081;
+  border: ${(props) => props.borderColor};
   border-radius: 3px;
   box-sizing: border-box;
-  font-size: 16px;
+  font-size: ${(props)=> props.size};
   ${(props) => (props.margin ? `margin:${props.margin};` : '')}
+  ${(props)=> (props.bold?'font-weight:600;':'')}
   outline: none;
   &:focus{
     outline: none;
