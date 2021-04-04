@@ -4,7 +4,7 @@ import { ConnectedRouter } from "connected-react-router";
 import { Route } from "react-router-dom";
 import { history } from "../redux/configStore";
 import { Footer, Header } from "../components";
-import { ProductList } from "../pages";
+import { ProductList,Wait,Login,Signup } from "../pages";
 import '../scss/main.scss';
 import { Grid } from "../elements";
 function App() {
@@ -13,7 +13,11 @@ function App() {
       <Header/>
       <ConnectedRouter history={history}>
         <Grid width="1050px" margin="0px auto">
-        <Route path="/" exact component={ProductList}/>
+          <Route path="/" exact component={ProductList} />
+          <Route path="/new" exact component={Wait} />
+          <Route path="/cheap" exact component={Wait} />
+          <Route path="/login" exact component={Login} />
+          <Route path="/signup" exact component={Signup} />
         </Grid>
       </ConnectedRouter>
       <Footer/>

@@ -2,4 +2,5 @@ import Grid from './Grid';
 import Text from './Text';
 import List from './List';
 import Button from './Button';
-export { Grid,Text,List,Button };
+import Input from './Input';
+export { Grid,Text,List,Button,Input};

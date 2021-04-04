@@ -18,7 +18,7 @@ const Button = (props) => {
 
   return (
     <React.Fragment>
-      <BasicButton {...styles} _onClick={_onClick} disabled={disabled}>{text? text:children}</BasicButton>
+      <BasicButton {...styles} onClick={_onClick}  disabled={disabled}>{text? text:children}</BasicButton>
     </React.Fragment>
   )
 

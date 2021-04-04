@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Grid} from '../elements';
 import HeaderLeftImg  from '../images/header-left-delivery.gif';
+import { history } from '../redux/configStore'
 
 const Header = (props) => {
   
@@ -12,21 +13,22 @@ const Header = (props) => {
         <Grid flex bg="white" height="37px">
           <img style={{cursor:'pointer', margin:'3px 0px 0px 0px'}}src={HeaderLeftImg} width="163px" alt="서울, 경기, 인천 샛별배송, 수도권 이외 지역 택배배송"/>
           <HeaderMenu>
-            <li className="header-menu">회원가입</li>
-            <li className="header-menu">로그인</li>
+            <li onClick={()=>history.push('/signup') } className="header-menu signup">회원가입</li>
+            <li onClick={()=>history.push('/login')} className="header-menu">로그인</li>
+            {/* <li className="header-menu member"><MemberSpan>일반</MemberSpan>멍멍이 님</li> */}
             <li className="arrow">고객센터</li>
           </HeaderMenu>
         </Grid>
           <Grid center height="63px">
-          <LogoImg src="https://res.kurly.com/images/marketkurly/logo/logo_x2.png" width="103px" alt="마켓컬리 로고" style={{cursor:'pointer'}}/>
+          <LogoImg src="https://res.kurly.com/images/marketkurly/logo/logo_x2.png" width="103px" alt="마켓컬리 로고" style={{ cursor: 'pointer' }} onClick={()=>history.push('/')}/>
         </Grid>
         <Grid flex>
           <Grid>
             <HeaderCategory>
               <li className="all-category">전체 카테고리</li>
-              <li>신상품</li>
-              <li> 베스트</li>
-              <li>알뜰쇼핑 </li>
+              <li onClick={()=>history.push('/new')}>신상품</li>
+              <li onClick={()=>history.push('/')}> 베스트</li>
+              <li onClick={()=>history.push('/cheap')}>알뜰쇼핑 </li>
               <li> 금주혜택</li>
             </HeaderCategory>
           </Grid>
@@ -72,6 +74,21 @@ const HeaderMenu = styled.ul`
 
     }
 
+    
+    &.member:before{
+      content:'';
+      width:8px;
+      height: 5px;
+      background: url('https://res.kurly.com/pc/ico/1908/ico_down_8x5.png');
+      display: inline-block;
+      position: relative;
+      left:102px;
+      
+    }
+
+    &.member:after{
+      margin-left: 9px;
+    }
     &.header-menu:after{
     content: '';
     float:right;
@@ -83,7 +100,7 @@ const HeaderMenu = styled.ul`
     background-color: #d8d8d8;
   }
   }
-  & li:nth-child(1){
+  & .signup{
     color:#5f0080;
    
   }
@@ -174,3 +191,13 @@ cursor: pointer;
   }
 }
 `;
+
+const MemberSpan = styled.span`
+  font-size:10px;
+  color:#5f0080;
+  border:1px solid #5f0080;
+  padding: 0px 9px;
+  border-radius: 15px;
+  margin-right: 5px;
+
+`
