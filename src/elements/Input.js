@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from "styled-components";
-import { Text, Grid } from './index';
 const Input = (props) => {
   
   const { placeholder, _onChange,type, width,margin,padding,_onClick } =  props ;

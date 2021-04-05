@@ -17,3 +17,10 @@ export const pwContinuous = (pw) => {
   const _reg = /(\w)\1\1/;
   return _reg.test(pw)
 }
+
+export const emailCheck = (email) => {
+
+  let _reg = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+  return _reg.test(email);
+
+}

@@ -14,6 +14,7 @@ const Header = (props) => {
       loginbox.style.display = 'none';
       headerbox.style.position = 'fixed';
       headerbox.style.zIndex = '300';
+      headerbox.style.width = '1050px';
      
     } else {
       loginbox.style.display = 'block';

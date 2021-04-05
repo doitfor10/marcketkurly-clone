@@ -2,7 +2,6 @@ import React from "react";
 import styled from 'styled-components';
 import { Text, Grid } from "../elements";
 import { Product } from "../components";
-import { RESP } from '../shared/response';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as productActions } from '../redux/modules/product';
 const ProductList = (props) => {

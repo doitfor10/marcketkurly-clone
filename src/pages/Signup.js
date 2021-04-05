@@ -2,8 +2,8 @@ import React from 'react';
 import styled from "styled-components";
 import { Input, Text, Grid, Button } from '../elements';
 import '../scss/login.scss';
-import { idCheck, pwMacth, pwContinuous } from '../shared/common';
-import { useSelector, useDispatch } from 'react-redux';
+import { idCheck, pwMacth, pwContinuous,emailCheck } from '../shared/common';
+import { useDispatch } from 'react-redux';
 import { actionCreators as userActions } from '../redux/modules/user';
 
 const Signup = (props) => {
@@ -14,6 +14,9 @@ const Signup = (props) => {
   const [userName, setUserName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [address, setAddress] = React.useState('');
+  //아이디,이메일 중복
+  const [idDup, setIdDup] = React.useState(false);
+  const [emailDup, setEmailDup] = React.useState(false);
   const dispatch = useDispatch();
 
   const changeId = (e) => {
@@ -78,6 +81,47 @@ const Signup = (props) => {
     }
   }
 
+  const checkIdAPI = (id) => {
+    
+  const idInfo = document.querySelector('ul.checkId li:nth-child(2)');
+  const API = `http://dmsql5303.shop/api/v1/signup/username/${id}`;
+    fetch(API).then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result === false) {
+          alert('이미 등록된 아이디입니다.');//중복시 false
+          idInfo.classList.add('error');
+          idInfo.classList.remove('ok');
+          setIdDup(false);
+        } else {
+          alert('사용이 가능합니다.');
+          idInfo.classList.add('ok');
+          idInfo.classList.remove('error');
+          setIdDup(true);
+        }
+      });
+  }
+
+
+  const checkEmailAPI = (email) => {
+    
+    const API = `http://dmsql5303.shop/api/v1/signup/email/${email}`;
+    fetch(API).then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result === false) {
+          
+          alert('이미 등록된 이메일입니다. 다시 작성해 주십시오!');
+          setEmailDup(false);
+
+        } else {
+          alert('사용이 가능합니다.');
+          setEmailDup(true);
+        }
+      });
+  }
+
+
   const signUp = () => {
     
     if (!idCheck(id) || !pwMacth(pw) || pwContinuous(pw) || pw !== pwCheck) {
@@ -98,7 +142,22 @@ const Signup = (props) => {
       alert('주소를 입력해주세요.');
       return false;
     }
+
+    if (idDup === false) {
+      alert('아이디 중복확인을 해주세요.');
+      return false;
+    }
+
+    if (emailDup === false) {
+      alert('이메일 중복확인을 해주세요.');
+      return false;
+    }
     
+    if (!emailCheck(email)) {
+      alert('이메일 형식을 지켜주세요!');
+      return false;
+    }
+
     dispatch(userActions.signupAPI(id,pw,userName,email,address));
   }
 
@@ -123,12 +182,12 @@ const Signup = (props) => {
                   changeId(e);
                 }} />
                   <Button size="14px" bg="#ffffff" color="#5f0080" width="120px" padding="11px 14px" _onClick={() => {
-                   
+
                     if (!idCheck(id)) {
                       alert('아이디는 6자 이상의 영문 혹은 영문과 숫자 조합만 가능합니다.');
                       return false;
                     }
-                    dispatch(userActions.checkIdAPI(id));
+                    checkIdAPI(id);
                   }}>중복확인</Button>
               </Grid>
               <InfoUl className="checkId">
@@ -181,7 +240,12 @@ const Signup = (props) => {
                 <Input placeholder="예: marketkurly@kurly.com" padding="14px" width="332px"
                 _onChange={(e) => { setEmail(e.target.value) }}/>
                   <Button size="14px" bg="#ffffff" color="#5f0080" width="120px" padding="11px 14px" _onClick={() => {
-                    dispatch(userActions.checkEmailAPI(email));
+                   
+                    if (!emailCheck(email)) {
+                      alert('이메일 형식을 지켜주세요!');
+                      return false;
+                    }
+                    checkEmailAPI(email);
                   }}>중복확인</Button>
               </Grid>
             </td>
@@ -253,7 +317,7 @@ const SignTable = styled.table`
 }
 `
 const InfoUl = styled.ul`
- 
+
   font-size:12px;
   color:#666666;
   position: relative;

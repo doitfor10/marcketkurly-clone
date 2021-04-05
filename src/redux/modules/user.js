@@ -14,29 +14,6 @@ const initialState = {
 };
 
 
-const checkIdAPI = (id) => {
-  return function (dispatch, getState, { history }) {
-    
-    const API = `http://dmsql5303.shop/api/v1/signup/username/${id}`;
-    fetch(API).then((response) => response.json())
-      .then((result) => {
-        console.log(result); //중복시 false
-      });
-  }
-};
-
-const checkEmailAPI = (email) => {
-  return function (dispatch, getState, { history }) {
-
-    const API = `http://dmsql5303.shop/api/v1/signup/email/${email}`;
-    fetch(API).then((response) => response.json())
-      .then((result) => {
-        console.log(result); //중복시 false
-      });
-
-    
-  }
-};
 
 
 const signupAPI = (id,pw,userName,email,address) => {
@@ -58,7 +35,8 @@ const signupAPI = (id,pw,userName,email,address) => {
   })
     .then((response) => response)
     .then((result) => {
-    console.log(result.ok);
+
+      history.push('/login');
   });
   }
 };
@@ -106,8 +84,7 @@ export default handleActions(
   
 const actionCreators = {
 
-  checkIdAPI,
-  checkEmailAPI,
+
   signupAPI,
   loginAPI,
   logOut

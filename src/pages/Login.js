@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Input,Text,Grid,Button } from '../elements';
+import { Input, Text, Grid, Button } from '../elements';
+import { history } from "../redux/configStore";
 
 const Login = (props)=> {
   
@@ -20,7 +21,9 @@ const Login = (props)=> {
           </Grid>
         </Grid>
         <Button margin="17px 0px 0px 0px">로그인</Button>
-        <Button margin="10px" bg="#ffffff" color="#5f0080">회원가입</Button>
+        <Button margin="10px" bg="#ffffff" color="#5f0080" _onClick={() => {
+          history.push('/signup');
+        }}>회원가입</Button>
      </LoginBox>
       
     </React.Fragment>

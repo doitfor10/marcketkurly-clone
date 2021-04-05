@@ -1,6 +1,6 @@
 import React from "react";
 import styled from 'styled-components';
-import { Text, Grid } from "../elements";
+import { Text } from "../elements";
 
 const Product = (props) => {
   return (
