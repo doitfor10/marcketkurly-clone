@@ -4,7 +4,7 @@ import { ConnectedRouter } from "connected-react-router";
 import { Route } from "react-router-dom";
 import { history } from "../redux/configStore";
 import { Footer, Header } from "../components";
-import { ProductList,Wait,Login,Signup } from "../pages";
+import { ProductList,Wait,Login,Signup,Event,Cart } from "../pages";
 import '../scss/main.scss';
 import { Grid } from "../elements";
 function App() {
@@ -18,6 +18,9 @@ function App() {
           <Route path="/cheap" exact component={Wait} />
           <Route path="/login" exact component={Login} />
           <Route path="/signup" exact component={Signup} />
+          <Route path="/event" exact component={Event} />
+          <Route path="/cart/:id" exact component={Cart} />
+          
         </Grid>
       </ConnectedRouter>
       <Footer/>

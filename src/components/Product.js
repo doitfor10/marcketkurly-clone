@@ -10,7 +10,7 @@ const Product = (props) => {
             <ProductImgBox>
           <img src={ props.img} />
               <CartBtnBox>
-            <CartBtn onClick={() => { alert(`${props.id} 상품 장바구니에 담김!`)}}/>
+            <CartBtn onClick={() => { alert(`${props.pid} 상품 장바구니에 담김!`)}}/>
               </CartBtnBox>
             </ProductImgBox>
         <Text size="20px" margin="7px 0px 5px 0px">{ props.title}</Text>

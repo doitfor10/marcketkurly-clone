@@ -2,7 +2,10 @@ import React from 'react';
 import styled from "styled-components";
 import { Input, Text, Grid, Button } from '../elements';
 import '../scss/login.scss';
-import {idCheck,pwMacth,pwContinuous} from '../shared/common';
+import { idCheck, pwMacth, pwContinuous } from '../shared/common';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as userActions } from '../redux/modules/user';
+
 const Signup = (props) => {
   
   const [id, setId] = React.useState('');
@@ -11,6 +14,8 @@ const Signup = (props) => {
   const [userName, setUserName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [address, setAddress] = React.useState('');
+  const dispatch = useDispatch();
+
   const changeId = (e) => {
     
     setId(e.target.value);
@@ -94,7 +99,7 @@ const Signup = (props) => {
       return false;
     }
     
-    alert('가입 성공!')
+    dispatch(userActions.signupAPI(id,pw,userName,email,address));
   }
 
 
@@ -117,7 +122,14 @@ const Signup = (props) => {
                 }} _onChange={(e) => {
                   changeId(e);
                 }} />
-                <Button size="14px" bg="#ffffff" color="#5f0080" width="120px" padding="11px 14px">중복확인</Button>
+                  <Button size="14px" bg="#ffffff" color="#5f0080" width="120px" padding="11px 14px" _onClick={() => {
+                   
+                    if (!idCheck(id)) {
+                      alert('아이디는 6자 이상의 영문 혹은 영문과 숫자 조합만 가능합니다.');
+                      return false;
+                    }
+                    dispatch(userActions.checkIdAPI(id));
+                  }}>중복확인</Button>
               </Grid>
               <InfoUl className="checkId">
                 <li>· 6자 이상의 영문 혹은 영문과 숫자를 조합</li>
@@ -168,7 +180,9 @@ const Signup = (props) => {
               <Grid flex width="460px">
                 <Input placeholder="예: marketkurly@kurly.com" padding="14px" width="332px"
                 _onChange={(e) => { setEmail(e.target.value) }}/>
-                <Button size="14px" bg="#ffffff" color="#5f0080" width="120px" padding="11px 14px">중복확인</Button>
+                  <Button size="14px" bg="#ffffff" color="#5f0080" width="120px" padding="11px 14px" _onClick={() => {
+                    dispatch(userActions.checkEmailAPI(email));
+                  }}>중복확인</Button>
               </Grid>
             </td>
           </tr>          
