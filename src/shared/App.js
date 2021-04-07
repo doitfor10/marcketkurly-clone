@@ -19,7 +19,7 @@ function App() {
           <Route path="/login" exact component={Login} />
           <Route path="/signup" exact component={Signup} />
           <Route path="/event" exact component={Event} />
-          <Route path="/cart/:id" exact component={Cart} />
+          <Route path="/cart" exact component={Cart} />
           
         </Grid>
       </ConnectedRouter>

@@ -82,7 +82,7 @@ React.useEffect(() => {
           </Grid>
           <Grid>
             <Icons className="adress-icon"/>
-            <Icons className="cart-icon">
+              <Icons className="cart-icon" onClick={()=>history.push('/cart')}>
               <CartCount>1</CartCount>
             </Icons>
             

@@ -32,6 +32,7 @@ const signupAPI = (id,pw,userName,email,address) => {
     .then((response) => response)
     .then((result) => {
 
+      console.log(result);
       window.alert('회원가입이 되었습니다!');
       history.push('/login');
   });
@@ -53,6 +54,8 @@ const loginAPI = (id, pw) => {
       }).then((response) => response)
       .then((result) => {
         
+        console.log(result);
+
         if (result.status === 200) {
           let token = result.headers.get("Authorization");
           let userInfo = result.headers.get('userInfo');
