@@ -4,11 +4,13 @@ import { Text, Grid } from "../elements";
 import { Product } from "../components";
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as productActions } from '../redux/modules/product';
+import {RESP} from '../shared/response';
 const ProductList = (props) => {
   
 
-  const [category, setCategory] = React.useState('인기상품순');
-  const user_info = useSelector((state) => state.user.user);  
+  const [category, setCategory] = React.useState('인기 상품순');
+  const user_info = useSelector((state) => state.user.user);
+ // const product_list = RESP.PRODUCTS.result;
   const product_list = useSelector((state) => state.product.list);
   const dispatch = useDispatch();
     React.useEffect(() => {
@@ -44,13 +46,13 @@ const ProductList = (props) => {
         </Grid>
          <Grid gridBox margin="25px 0px">
           
-          {product_list.map((p, idx) => {
+           {product_list.map((p, idx) => {
           
             return (
               <Product {...p} key={p.pid}/>
             )
 
-          })}
+          })} 
           
         </Grid>
       </Grid>

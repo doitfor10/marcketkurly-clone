@@ -23,7 +23,7 @@ function App() {
           
         </Grid>
       </ConnectedRouter>
-      <Footer/>
+      <Footer />
    </React.Fragment>
   );
 }

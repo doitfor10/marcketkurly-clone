@@ -1,4 +1,5 @@
 import Header from './Header';
 import Footer from './Footer';
 import Product from './Product';
-export { Header, Footer,Product };
+import Modal from './Modal';
+export { Header, Footer,Product,Modal };

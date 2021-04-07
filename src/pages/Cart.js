@@ -1,10 +1,11 @@
 import React from "react";
+import styled from 'styled-components';
 
 const Cart = (props) => {
   
   return (
     <React.Fragment>
-        <h2>카트</h2>
+        <Title>카트</Title>
     </React.Fragment>
   )
 
@@ -12,3 +13,6 @@ const Cart = (props) => {
 
 export default Cart;
 
+const Title = styled.h2`
+  text-align: center;
+`

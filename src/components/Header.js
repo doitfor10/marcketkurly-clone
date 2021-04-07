@@ -2,9 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { Grid} from '../elements';
 import HeaderLeftImg  from '../images/header-left-delivery.gif';
-import { history } from '../redux/configStore'
+import { history } from '../redux/configStore';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as userActions } from '../redux/modules/user';
 
 const Header = (props) => {
+
+  const is_login = useSelector((state) => state.user.is_login);
+  const userInfo = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+  
 
   const headerChange = () => {
     const headerbox = document.querySelector('.header');
@@ -24,7 +31,10 @@ const Header = (props) => {
   
 React.useEffect(() => {
    
+
+    dispatch(userActions.isLogin());
     window.addEventListener('scroll', headerChange);
+  
 
     return () => window.removeEventListener('scroll', headerChange);
   }, []);
@@ -36,11 +46,20 @@ React.useEffect(() => {
         <ScrollMenu className="scroll-event">
           <Grid flex bg="white" height="37px">
             <img style={{cursor:'pointer', margin:'3px 0px 0px 0px'}}src={HeaderLeftImg} width="163px" alt="서울, 경기, 인천 샛별배송, 수도권 이외 지역 택배배송"/>
-            <HeaderMenu>
-              <li onClick={()=>history.push('/signup') } className="header-menu signup">회원가입</li>
-              <li onClick={()=>history.push('/login')} className="header-menu">로그인</li>
-              {/* <li className="header-menu"><MemberSpan>일반</MemberSpan>멍멍이 님</li>
-              <li className="header-menu">로그아웃</li> */}
+              <HeaderMenu>
+                {!is_login && (
+                  <React.Fragment>
+                    <li onClick={()=>history.push('/signup') } className="header-menu signup">회원가입</li>
+                    <li onClick={()=>history.push('/login')} className="header-menu">로그인</li>
+                  </React.Fragment>
+                )}
+                {is_login && (
+                <React.Fragment>
+                  <li className="header-menu"><MemberSpan>일반</MemberSpan>{userInfo?.name} 님</li>
+                    <li className="header-menu" onClick={() => {
+                      dispatch(userActions.logout());
+                    }}>로그아웃</li>
+                </React.Fragment>)}
               <li className="arrow">고객센터</li>
             </HeaderMenu>
           </Grid>

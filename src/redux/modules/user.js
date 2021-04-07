@@ -1,7 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 
-
 const SET_USER = 'SET_USER';
 const LOG_OUT = 'LOG_OUT';
 
@@ -12,9 +11,6 @@ const initialState = {
   user: null,
   is_login: false,
 };
-
-
-
 
 const signupAPI = (id,pw,userName,email,address) => {
   return function (dispatch, getState, { history }) {
@@ -36,6 +32,7 @@ const signupAPI = (id,pw,userName,email,address) => {
     .then((response) => response)
     .then((result) => {
 
+      window.alert('회원가입이 되었습니다!');
       history.push('/login');
   });
   }
@@ -43,31 +40,70 @@ const signupAPI = (id,pw,userName,email,address) => {
 
 const loginAPI = (id, pw) => {
   return function (dispatch, getState, { history }) {
-    
+     const API = 'http://dmsql5303.shop/api/v1/login';
+     fetch(API, {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+      username: id,
+      password: pw,
+      })
+      }).then((response) => response)
+      .then((result) => {
+        
+        if (result.status === 200) {
+          let token = result.headers.get("Authorization");
+          let userInfo = result.headers.get('userInfo');
+          userInfo = JSON.parse(userInfo);
+          userInfo.name = decodeURI(atob(userInfo.name));
+          userInfo.address = decodeURI(atob(userInfo.address));
+          localStorage.setItem('token', token);
+          //parse해서 쓰기
+          localStorage.setItem('userInfo', JSON.stringify(userInfo));
+          dispatch(setUser({
+            uid: userInfo.uid,
+            name: userInfo.name,
+            address: userInfo.address,
+          }))
 
-    // const API = 'api';
-    // fetch(API, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     userId: id,
-    //     password: pw,
-    //   })
-    // }).then((response) => response.json)
-    //   .then((result) => {
-    //     console.log(result);
-    //   });
-
+          history.push('/');
+        } else {
+          window.alert('로그인에 실패했습니다.');
+          window.location.reload();
+        }
+      }).catch((error) => {
+        console.log(error);
+      });
   }
 };
 
 const logout = () => {
   return function (dispatch, getState, { history }) {
     
+    localStorage.removeItem('token');
+    localStorage.removeItem('userInfo');
+    dispatch(logOut());
+    history.replace('/');
   }
 };
+
+const isLogin = () => {
+  return function (dispatch, getState, { history }) {
+    const token = localStorage.getItem('token');
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+    if (!token || !userInfo) {
+      return false;
+    }
+    dispatch(setUser({
+      uid: userInfo.uid,
+      name: userInfo.name,
+      address: userInfo.address,
+    }));
+  }
+}
 
 export default handleActions(
   {
@@ -83,12 +119,10 @@ export default handleActions(
   }, initialState);
   
 const actionCreators = {
-
-
   signupAPI,
   loginAPI,
-  logOut
-
+  logout,
+  isLogin
 };
 
 export { actionCreators };

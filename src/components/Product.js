@@ -1,7 +1,7 @@
 import React from "react";
 import styled from 'styled-components';
 import { Text } from "../elements";
-
+import { Modal } from '../components';
 const Product = (props) => {
   return (
     <React.Fragment>
@@ -10,7 +10,7 @@ const Product = (props) => {
             <ProductImgBox>
           <img src={ props.img} />
               <CartBtnBox>
-            <CartBtn onClick={() => { alert(`${props.pid} 상품 장바구니에 담김!`)}}/>
+                <Modal product={props}/>
               </CartBtnBox>
             </ProductImgBox>
         <Text size="20px" margin="7px 0px 5px 0px">{ props.title}</Text>
@@ -32,12 +32,32 @@ const ProductBox = styled.div`
 const ProductImgBox = styled.div`
   overflow: hidden;
   position: relative;
+  width:309px;
+  height: 397px;
   
   & img{
     margin:0px;
     padding:0px;
     width:309px;
     height:397px;
+    -webkit-transform:scale(1);
+    -moz-transform:scale(1);
+    -ms-transform:scale(1); 
+    -o-transform:scale(1);    
+    transform:scale(1);
+    -webkit-transition:.4s;
+    -moz-transition:.4s;
+    -ms-transition:.4s;
+    -o-transition:.4s;
+    transition: .4s;
+    &:hover{
+      transform:scale(1.1);
+      -webkit-transform:scale(1.1);
+      -moz-transform:scale(1.1);
+      -ms-transform:scale(1.1); 
+      -o-transform:scale(1.1);
+      
+    }
  }
 `
 const CartBtnBox = styled.div`
@@ -46,15 +66,6 @@ bottom:14px;
 right: 14px;
 `
 
-const CartBtn = styled.button`
-  width: 48px;
-  height: 48px;
-  border-radius: 100%;
-  outline: none;
-  cursor: pointer;
-  border: none;
-  color:transparent;
-  background:url(https://res.kurly.com/pc/ico/2010/ico_cart.svg) no-repeat 50% 50%;
-`
+
 
 export default Product;
