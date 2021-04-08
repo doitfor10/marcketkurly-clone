@@ -61,7 +61,7 @@ const GridBox = styled.div`
   ${(props) => props.flex ? `display:flex; align-items:center; justify-content:space-between;` : ''}
   ${(props)=>(props.height?`height:${props.height};`:'')}
     `
-//css grid 적용
+
 const ParentsGridbox = styled.div`
   width: ${(props) => props.width};
   box-sizing: border-box;

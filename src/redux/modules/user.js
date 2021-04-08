@@ -29,12 +29,18 @@ const signupAPI = (id,pw,userName,email,address) => {
         address:address
     })
   })
-    .then((response) => response)
+    .then((response) => response.json())
     .then((result) => {
-
-      console.log(result);
-      window.alert('회원가입이 되었습니다!');
-      history.push('/login');
+      
+      let dupMsg = result.message;
+      if (dupMsg === 'emailfalse') {
+        window.alert('이메일 중복확인을 해주세요.');
+      } else if (dupMsg === 'usernamefalse') {
+        window.alert('아이디 중복확인을 해주세요.');
+      } else {
+        window.alert('회원가입이 되었습니다!');
+        history.push('/login');
+      }
   });
   }
 };
@@ -63,12 +69,14 @@ const loginAPI = (id, pw) => {
           userInfo.name = decodeURI(atob(userInfo.name));
           userInfo.address = decodeURI(atob(userInfo.address));
           localStorage.setItem('token', token);
-          //parse해서 쓰기
+          
+          
           localStorage.setItem('userInfo', JSON.stringify(userInfo));
           dispatch(setUser({
             uid: userInfo.uid,
             name: userInfo.name,
-            address: userInfo.address,
+            address: userInfo.address.split('+').join(' '),
+            
           }))
 
           history.push('/');

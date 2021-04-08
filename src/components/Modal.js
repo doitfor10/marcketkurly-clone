@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import CartModal from '../elements/CartModal';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 function Modal(props) {
-    // useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
     const [ modalOpen, setModalOpen ] = useState(false);
     const { product } = props;
-    /*const product = {
-        pid:1,
-        title: '[kurly\'s] 국산콩 두부 300g',
-        price: 1900,
-    }
-    */
+    const user_info = useSelector((state) => state.user.user);
+
     const openModal = () => {
         setModalOpen(true);
     }
@@ -20,14 +16,16 @@ function Modal(props) {
 
     return (
         <React.Fragment>
-            <CartBtn onClick={ openModal }/>
-            
+            <CartBtn onClick={() => {
+                if(!user_info){
+                    alert('로그인 후 사용해주세요!');
+                    return false;
+                }
+                openModal();
+                }
+            }/>
             <CartModal open={modalOpen} close={closeModal} product={ product}/>
-
-                {/* <main> { props.children } </main> */}
-                
-           
-        </React.Fragment>
+       </React.Fragment>
     )
 }
 
@@ -41,5 +39,5 @@ const CartBtn = styled.button`
   cursor: pointer;
   border: none;
   color:transparent;
-  background:url(https://res.kurly.com/pc/ico/2010/ico_cart.svg) no-repeat 50% 50%;
+  background:url('https://res.kurly.com/pc/ico/2010/ico_cart.svg') no-repeat 50% 50%;
 `

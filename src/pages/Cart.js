@@ -1,65 +1,146 @@
 import React from "react";
 import styled from 'styled-components';
-import styeld from 'styled-components';
-import { Button, Grid } from "../elements";
+import { Button, Grid,Text} from "../elements";
 import { CartCard } from '../components';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as cartActions } from '../redux/modules/cart';
+import { history } from "../redux/configStore";
+import { priceUnit } from '../shared/common';
 const Cart = (props) => {
   
+  const dispatch = useDispatch();
+  const user_info = useSelector((state) => state.user.user);
+  const cart_list = useSelector((state) => state.cart.list);
+  let total_price = cart_list.map((c) => Number(c.productPrice * c.productCount)).reduce((acc, curr) =>acc + curr,0);
+  const delivery_charge = cart_list.length===0?0:3000;
+
+  React.useEffect(() => {
+   
+    if (!user_info) {
+     return false;
+    } 
+
+    dispatch(cartActions.getCartAPI(user_info.uid));
+
+  }, [user_info])
+  
+
   return (
-    <React.Fragment>
-     <Grid margin="0px 0px 70px 0px"> 
+    
+     <Grid margin="0px 0px 50px 0px"> 
       <TitleBox>
          <Title>장바구니</Title>
           <DeleteUl>
-            <input type="checkbox" checked/>
-            <li>전체선택(1/1)</li>
-            <li> 선택 삭제</li>
+         
+          <li>전체상품 {cart_list.length}개</li>
+           
           </DeleteUl>
       </TitleBox>
-        <ParentBox>
-          <Box2>
-             <p>장바구니에 담긴 상품이 없습니다</p> 
-          </Box2>
-        <ParentBox2>
-          <Box3>
-            <img src="https://res.kurly.com/pc/service/cart/2007/ico_location.svg" height="20px" />
+        <ContentBox>
+          <CartBox>
+          {cart_list.length===0 && <NoneCart>장바구니에 담긴 상품이 없습니다</NoneCart>}
+          {cart_list.length !== 0 && (
+            
+              cart_list.map((c, idx) => {
+                return (
+                  <CartCard {...c} key={c.cid}/>
+                )
+              })
+          )}
+        </CartBox>
+        <div>
+        <OrderBox>
+          <AddressBox>
+            <AdressIcon src="https://res.kurly.com/pc/service/cart/2007/ico_location.svg"/>
             <span className='address'>배송지</span>
             
-            <p style={{margin:'7px 0px 0px 0px'}}><span style={{ color: "#5f0080" }}>배송지를 입력하고</span>
-              <br /> 배송유형을 확인해 보세요!</p>
+              <Text margin="7px">{ user_info?.address}</Text>
+            <Text size="14px" color="#5f0080">샛별배송</Text>
             <InputBox>
-              <AddressImg src="https://res.kurly.com/pc/service/cart/2007/ico_search.svg"/>
-              <span>주소 검색</span>
+               <span>배송지 변경</span>
             </InputBox>
-        </Box3>
+        </AddressBox>
           <PriceBox>
             <ProductPriceBox>
-              <p>상품금액</p><p>0원</p>
+              <Text>상품금액</Text>
+                <Text>{ priceUnit(total_price)} 원</Text>
             </ProductPriceBox>
              <ProductPriceBox>
-              <p>배송비</p><p>2,500원</p>
+              <Text>배송비</Text>
+                <Text>+{ priceUnit(delivery_charge)} 원</Text>
             </ProductPriceBox>
               <ProductPriceBox>
-              <p>결제예정금액</p><p>0원</p>
+              <Text>결제예정금액</Text>
+              <Text>
+                  <TotalPrice>{priceUnit(total_price+delivery_charge)}</TotalPrice> 원
+              </Text>
             </ProductPriceBox>
+            <SaveMoneyBox>
+              <SaveMoney>적립</SaveMoney>
+              <MoneyInfo>구매 시 0원 적립</MoneyInfo>
+            </SaveMoneyBox>
             </PriceBox>
-            <Button margin="25px 0px">상품을 담아주세요</Button>
+           
+          </OrderBox>
+           <OrderInfoBox>
+            <Button margin="25px 0px" _onClick={() => {
+              alert('주문이 완료되었습니다.');
+              history.push('/');
+            }}>주문하기</Button>
             <Info>
               <li>· '입금확인' 상태일 때는 주문 내역 상세에서 직접 주문취</li>
               <li>소가 가능합니다.</li>
               <li>· '입금확인' 이후 상태에는 고객센터로 문의해주세요.</li>
             </Info>
-          </ParentBox2>
-        </ParentBox>
-      </Grid>
-    </React.Fragment>
+        </OrderInfoBox> 
+          </div>
+        </ContentBox>
+          
+    </Grid>
+  
   )
 
 }
 
 export default Cart;
 
+const NoneCart = styled.p`
+  margin-top:150px;
+`;
 
+const OrderInfoBox = styled.div`
+  width:285px;
+  position: relative;
+  left:12px;
+
+`
+
+const SaveMoneyBox = styled.div`
+  text-align: right;
+  padding:0px 18px 0px 0px;
+`
+
+const SaveMoney = styled.span`
+  font-size:10px;
+  display: inline-block;
+  padding:1px 8px;
+  color:#ffffff;
+  font-weight: 500;
+  border-radius:12px;
+  border:1px solid #F7965F;
+  text-align: center;
+  background-color: #FFBF00;
+  vertical-align: middle;
+  position: relative;
+  right:5px;
+  top:-1px;
+    
+`
+
+const MoneyInfo = styled.span`
+  font-size:12px;
+  color:#666666;
+`
 
 const DeleteUl = styled.ul`
   display: flex;
@@ -68,13 +149,6 @@ const DeleteUl = styled.ul`
   left:-30px;
   top:60px;
   gap:15px;
-
-  & li:nth-child(1):after{
-    content:'|';
-    margin-left:15px;
-    color:#dddddd;
-  }
-
 `
 
 const Info = styled.ul`
@@ -91,97 +165,88 @@ const Info = styled.ul`
   }
 `
 
-const ProductPriceBox = styeld.div`
-display:flex;
-height:35px;
-justify-content:space-between;
+const ProductPriceBox = styled.div`
+display: flex;
+height: 35px;
+justify-content: space-between;
 padding:0px 20px;
-font-size:16px;
+font-size: 16px;
 color:#4c4c4c;
 `
 
-const Title = styeld.div`
+const Title = styled.div`
 text-align:center;
-font-size:30px;
-font-weight:600;
+font-size: 30px;
+font-weight: 600;
 `
 
 const TitleBox = styled.div`
   padding:55px 0px;
- 
 `
-const Box2 = styeld.div`
+const CartBox = styled.div`
 width:742px;
-border-top: 1px solid #333; 
-padding-left:9px;
+border-top:1px solid #333;
+padding-left: 9px;
 line-height: 20px;
 box-sizing: content-box;
 margin:10px;
 font-size:14px;
 text-align:center;
-font-weight:500;
+font-weight: 500;
+`
+
+const AdressIcon = styled.img`
+  height: 20px;
+  position: relative;
+  top:5px;
+`
+
+const AddressBox = styled.div`
+border-bottom: 1px solid #f2f2f2;
+padding: 20px;
+box-sizing: border-box;
+font-size: 16px;
+font-weight: 500;
 
 & p{
-  font-size: 16px;
-  margin-top:150px;
+  margin: 7px 0px 0px 0px;
 }
 `
 
-const Box3 = styeld.div`
-
-border-bottom: 1px solid #f2f2f2; 
-padding: 20px 20px 20px 16px;
-box-sizing: border-box;
-font-size:16px;
-font-weight:500;
-
-& span.address{
-  position: relative;
-  top:-4px;
-  left:5px;
-  color:#4c4c4c;
-}
-
+const ContentBox = styled.div`
+display: flex;
 `
-const ParentBox = styeld.div`
-display:flex;
-height:500px;
 
-`
-const InputBox = styeld.div`
+const InputBox = styled.div`
 border:1px solid purple;
 margin:17px 0px 0px;
-border-radius:5px;
-height:36px;
+border-radius: 5px;
+height: 36px;
 width:244px;
-text-align:center;
-line-height:33px;
+text-align: center;
+line-height: 33px;
 font-size:12px;
 color:purple;
 position: relative;
-z-index: 2;
+z-index:2;
+cursor: pointer;
 `
 
-const AddressImg = styled.img`
-  width:20px;
-  height: 21px;
-  position: relative;
-  top:7px;
-
-`
-
-const PriceBox = styeld.div`
-background-color:#f8f9fa;
+const PriceBox = styled.div`
+background-color: #f8f9fa;
 font-size:16px;
-padding-bottom:30px;
+padding:30px 0px;
 `
-
-const ParentBox2 = styeld.div`
-padding: 0px 0px 0px 0px;
+const OrderBox = styled.div`
+padding:0px;
 width:285px;
-height:310px;
-border: 1px solid #f2f2f2;
+border:1px solid #f2f2f2;
 position: relative;
 top:10px;
 left:10px;
+`
+const TotalPrice = styled.span`
+  font-size: 22px;
+  color:#4c4c4c;
+  font-weight: 500;
 `

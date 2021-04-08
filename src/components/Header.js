@@ -82,8 +82,14 @@ React.useEffect(() => {
           </Grid>
           <Grid>
             <Icons className="adress-icon"/>
-              <Icons className="cart-icon" onClick={()=>history.push('/cart')}>
-              <CartCount>1</CartCount>
+              <Icons className="cart-icon" onClick={() => {
+                if (!userInfo) {
+                  alert('로그인 후 사용해주세요!');
+                  return false;
+                }
+                history.push('/cart')
+              }}>
+             
             </Icons>
             
           </Grid>
@@ -102,8 +108,6 @@ const HeaderBox = styled.div`
   background-color: #ffffff;
 `
 
-
-//헤더 회원가입&로그인 
 const HeaderMenu = styled.ul`
   
   display: flex;
@@ -150,7 +154,6 @@ const LogoImg = styled.img`
 `
   ;
 
-//헤더 카테고리 메뉴
 const HeaderCategory = styled.ul`
   display: flex;
   padding:0px;

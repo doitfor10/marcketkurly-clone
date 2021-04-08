@@ -10,7 +10,6 @@ const ProductList = (props) => {
 
   const [category, setCategory] = React.useState('인기 상품순');
   const user_info = useSelector((state) => state.user.user);
- // const product_list = RESP.PRODUCTS.result;
   const product_list = useSelector((state) => state.product.list);
   const dispatch = useDispatch();
     React.useEffect(() => {

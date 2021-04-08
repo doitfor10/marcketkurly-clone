@@ -1,6 +1,5 @@
 export const idCheck = (id) => {
-  
-  //let _reg = /^[A-Za-z0-9]{6,}/g;
+ 
   const _reg =/^(?!(?:[0-9]+)$)([a-zA-Z]|[0-9a-zA-Z]){6,}$/
   return _reg.test(id);
 }
@@ -23,4 +22,8 @@ export const emailCheck = (email) => {
   let _reg = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   return _reg.test(email);
 
+}
+
+export const priceUnit = (price) => {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }

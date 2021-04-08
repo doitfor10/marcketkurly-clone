@@ -14,7 +14,6 @@ const Signup = (props) => {
   const [userName, setUserName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [address, setAddress] = React.useState('');
-  //아이디,이메일 중복
   const [idDup, setIdDup] = React.useState(false);
   const [emailDup, setEmailDup] = React.useState(false);
   const dispatch = useDispatch();
@@ -87,9 +86,8 @@ const Signup = (props) => {
   const API = `http://dmsql5303.shop/api/v1/signup/username/${id}`;
     fetch(API).then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result === false) {
-          alert('이미 등록된 아이디입니다.');//중복시 false
+          alert('이미 등록된 아이디입니다.');
           idInfo.classList.add('error');
           idInfo.classList.remove('ok');
           setIdDup(false);
@@ -108,7 +106,7 @@ const Signup = (props) => {
     const API = `http://dmsql5303.shop/api/v1/signup/email/${email}`;
     fetch(API).then((response) => response.json())
       .then((result) => {
-        console.log(result);
+        
         if (result === false) {
           
           alert('이미 등록된 이메일입니다. 다시 작성해 주십시오!');

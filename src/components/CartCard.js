@@ -1,21 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
+import cart, { actionCreators as cartActions } from '../redux/modules/cart';
+import { useDispatch } from 'react-redux';
+import { priceUnit } from '../shared/common';
 
 const CartCard = (props) => {
   
+  const [count, setCount] = useState(props.productCount);
+  const originalPrice = props.productPrice;
+  const dispatch = useDispatch();
+
+ 
   return (
     <React.Fragment>
       <CartBox>
-        <input type="checkbox" checked />
-        <img src="https://img-cf.kurly.com/shop/data/goods/1597914553230i0.jpg" width="60px" height="78px"/>
-        <p>100% 미국 몽모랑시 NFC 타트체리 주스</p>
-      <CountBox>
-        <CountBtn>-</CountBtn>
-        <CountSpan>1</CountSpan>
-        <CountBtn>+</CountBtn>
-      </CountBox>
-        <p>37,500원</p>
-      </CartBox>
+      
+        <img src={props.productImg} width="60px" height="78px"/>
+        <TitleBox>
+          <h4>{props.productTitle}</h4>
+        </TitleBox>
+        <CountBox>
+          <CountBtn onClick={() => {
+            if (count === 1) {
+              return false;
+            }
+            setCount(count - 1);
+            dispatch(cartActions.updateCartAPI(props.cid,count-1));
+            
+          }}>-</CountBtn>
+          <CountSpan>{count}</CountSpan>
+          <CountBtn onClick={() => {
+            setCount(count + 1);
+            dispatch(cartActions.updateCartAPI(props.cid,count+1));
+           
+          }}>+</CountBtn>
+        </CountBox>
+          <h4>{priceUnit(originalPrice*count)} 원</h4>
+        <DeleteBtn onClick={() => {
+          dispatch(cartActions.deleteCartAPI(props.cid));
+         
+         }}/>
+        </CartBox>
     </React.Fragment>
   )
 
@@ -23,17 +48,35 @@ const CartCard = (props) => {
 
 export default CartCard;
 
+
+const TitleBox = styled.div`
+  width:285px;
+  text-align: left;
+  margin-left: 12px;
+`
+
+const DeleteBtn = styled.button`
+  background-image: url('https://res.kurly.com/pc/service/cart/2007/ico_delete.svg');
+  background-position: 50% 50%;
+  background-color: #ffffff;
+  outline: none;
+  border:none;
+  width:30px;
+  height:30px;
+  cursor: pointer;
+`
 const CartBox = styled.div`
   
   display: flex;
   height: 150px;
   align-items: center;
-  gap:26px;
+  gap:10px;
   margin-left:-10px;
-  border-bottom:1px solid lightgray;
-
-  & p{
-    margin-top:10 px;
+  border-bottom:1px solid #EAEAEA;
+  padding:0px 30px;
+  & h4{
+    font-size:16px;
+    font-weight: 400;
   }
 `
 

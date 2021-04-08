@@ -2,21 +2,25 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import "../scss/modal.scss";
 import { Text, Grid } from './index';
-
+import { useSelector,useDispatch } from 'react-redux';
+import { actionCreators as cartAction } from '../redux/modules/cart';
+import { history } from "../redux/configStore";
+import { priceUnit } from '../shared/common';
 const CartModal = (props) => {
-    // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
     const { open, close,product } = props;
     const [count, setCount] = useState(0);
     const total = product.price * count;
+    const dispatch = useDispatch();
+    const userInfo = useSelector((state) => state.user.user);
+    
 return (
-        // 모달이 열릴때 openModal 클래스가 생성된다.
         <div className={ open ? 'openModal modal' : 'modal' }>
             { open ? (  
                 <section>
                     <header>
                         <Text size="14px">{product.title}</Text>
                         <Grid flex>
-                            <MiniPrice>{product.price}원</MiniPrice>
+                            <MiniPrice>{priceUnit(product.price)}원</MiniPrice>
                             <CountBox>
                                 <CountBtn onClick={() => {
                                     if (count === 0) {
@@ -36,7 +40,7 @@ return (
                         <span>합계</span>
                         <TotalInnerBox>
                             <div>
-                            <TotalPrice>{total}</TotalPrice>
+                            <TotalPrice>{priceUnit(total)}</TotalPrice>
                             <Dollar>원</Dollar>
                             </div>
                             
@@ -46,7 +50,14 @@ return (
                     </main>
                     <footer>
                         <button className="close" onClick={close}> 취소 </button>
-                        <button className="pupleBtn"> 장바구니 담기 </button>
+                    <button className="pupleBtn" onClick={() => {
+                        if (count === 0) {
+                            alert('수량은 반드시 1 이상이어야 합니다.');
+                            return false;
+                        }
+                        dispatch(cartAction.addCartAPI(userInfo?.uid, product.pid, count));
+                        close();
+                    }}> 장바구니 담기 </button>
                     </footer>   
                 </section>
             ) : null }
