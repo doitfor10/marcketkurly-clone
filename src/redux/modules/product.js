@@ -19,7 +19,7 @@ const getProductAPI = () => {
     dispatch(loading(true));
 
     const API = 'http://dmsql5303.shop/api/v1/products/default';
-    fetch(API).then((response) => response.json()) //json
+    fetch(API).then((response) => response.json())
       .then((result) => {
         
         let product_list = [];

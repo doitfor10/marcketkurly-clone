@@ -18,6 +18,9 @@ const Signup = (props) => {
   const [emailDup, setEmailDup] = React.useState(false);
   const dispatch = useDispatch();
 
+
+
+  //해당 조건 충족 여부에 따라 info 다르게..
   const changeId = (e) => {
     
     setId(e.target.value);

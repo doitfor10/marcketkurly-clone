@@ -7,7 +7,7 @@ import { actionCreators as productActions } from '../redux/modules/product';
 import {RESP} from '../shared/response';
 const ProductList = (props) => {
   
-
+  //클릭시 바뀔 카테고리.
   const [category, setCategory] = React.useState('인기 상품순');
   const user_info = useSelector((state) => state.user.user);
   const product_list = useSelector((state) => state.product.list);

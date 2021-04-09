@@ -7,12 +7,14 @@ import { actionCreators as cartActions } from '../redux/modules/cart';
 import { history } from "../redux/configStore";
 import { priceUnit } from '../shared/common';
 const Cart = (props) => {
-  
+
   const dispatch = useDispatch();
   const user_info = useSelector((state) => state.user.user);
   const cart_list = useSelector((state) => state.cart.list);
-  let total_price = cart_list.map((c) => Number(c.productPrice * c.productCount)).reduce((acc, curr) =>acc + curr,0);
-  const delivery_charge = cart_list.length===0?0:3000;
+  //배송비 제외 장바구니에 담긴 상품의 총 금액.
+  let total_price = cart_list.map((c) => c.productPrice * c.productCount).reduce((acc, curr) => acc + curr, 0);
+  //기본 배송비 상품 담았을 때, 안 담았을 때.
+  const delivery_charge = cart_list.length === 0 ? 0 : 3000;
 
   React.useEffect(() => {
    

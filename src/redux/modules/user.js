@@ -31,7 +31,8 @@ const signupAPI = (id,pw,userName,email,address) => {
   })
     .then((response) => response.json())
     .then((result) => {
-      
+      //중복체크 후 다시 중복 아이디, 이메일로 바꿨을 경우
+      //대비 서버에서 한번 더 체크.
       let dupMsg = result.message;
       if (dupMsg === 'emailfalse') {
         window.alert('이메일 중복확인을 해주세요.');
@@ -57,11 +58,10 @@ const loginAPI = (id, pw) => {
       username: id,
       password: pw,
       })
-      }).then((response) => response)
-      .then((result) => {
+      }).then((result) => {
         
         console.log(result);
-
+        //성공시 토큰, 유저 정보 저장
         if (result.status === 200) {
           let token = result.headers.get("Authorization");
           let userInfo = result.headers.get('userInfo');
@@ -69,20 +69,15 @@ const loginAPI = (id, pw) => {
           userInfo.name = decodeURI(atob(userInfo.name));
           userInfo.address = decodeURI(atob(userInfo.address));
           localStorage.setItem('token', token);
-          
-          
           localStorage.setItem('userInfo', JSON.stringify(userInfo));
           dispatch(setUser({
             uid: userInfo.uid,
             name: userInfo.name,
             address: userInfo.address.split('+').join(' '),
-            
-          }))
-
+        }))
           history.push('/');
         } else {
           window.alert('로그인에 실패했습니다.');
-          window.location.reload();
         }
       }).catch((error) => {
         console.log(error);

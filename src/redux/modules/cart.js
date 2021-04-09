@@ -36,7 +36,6 @@ const getCartAPI = (userId =null) => {
             productTitle: r.product.title,
             productPrice: r.product.price,
             productImg: r.product.img,
-            
           }
           cart_list.push(cart);
         });
@@ -86,12 +85,10 @@ const deleteCartAPI = (cid=null) => {
         'Content-Type': 'application/json',
         'Authorization': `${token}`,
       }
-    }).then((response) => response)
-      .then((result) => {
-        
-        dispatch(deleteCart(cid));
-
-      });
+    }).then((response) => {
+      dispatch(deleteCart(cid))
+    });
+    
 
   }
 }
