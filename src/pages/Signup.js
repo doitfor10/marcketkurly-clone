@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef} from 'react';
 import styled from "styled-components";
 import { Input, Text, Grid, Button } from '../elements';
 import '../scss/login.scss';
@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { actionCreators as userActions } from '../redux/modules/user';
 
 const Signup = (props) => {
-  
+
   const [id, setId] = React.useState('');
   const [pw, setPw] = React.useState('');
   const [pwCheck, setPwCheck] = React.useState('');
@@ -17,16 +17,22 @@ const Signup = (props) => {
   const [idDup, setIdDup] = React.useState(false);
   const [emailDup, setEmailDup] = React.useState(false);
   const dispatch = useDispatch();
-
-
+  const idInfoOne = useRef(),
+        idInfoTwo = useRef(),
+        pwInfoLen = useRef(),
+        pwInfoMatch = useRef(),
+        pwInfoContinuos = useRef(),
+        idInfoUl = useRef(),
+        pwInfoUl = useRef(),
+        pwReInfoUl = useRef(),
+        pwInfoLi = useRef();
 
   //해당 조건 충족 여부에 따라 info 다르게..
-  const changeId = (e) => {
+  const changeId =  (e,idInfo) => {
     
     setId(e.target.value);
-    const idInfo = document.querySelector('ul.checkId li:nth-child(1)');
-      
-      if (!idCheck(e.target.value)) {
+    
+    if (!idCheck(e.target.value)) {
       idInfo.classList.add('error');
       idInfo.classList.remove('ok');
       
@@ -36,56 +42,51 @@ const Signup = (props) => {
       }
   }
 
-  const changePw = (e) => {
+  const changePw = (e,pwInfoLen,pwInfoMatch,pwInfoContinuos) => {
     
     const targetPw = e.target.value;
     setPw(targetPw);
-    const pwInfo_len = document.querySelector('ul.checkPw li:nth-child(1)');
-    const pwInfo_match = document.querySelector('ul.checkPw li:nth-child(2)');
-    const pwInfo_continuous = document.querySelector('ul.checkPw li:nth-child(3)');
 
     if (targetPw.length < 10) {
-      pwInfo_len.classList.add('error');
-      pwInfo_len.classList.remove('ok');
+      pwInfoLen.classList.add('error');
+      pwInfoLen.classList.remove('ok');
     } else {
-      pwInfo_len.classList.remove('error');
-      pwInfo_len.classList.add('ok');
+      pwInfoLen.classList.remove('error');
+      pwInfoLen.classList.add('ok');
     }
 
     if (!pwMacth(targetPw)) {
-      pwInfo_match.classList.add('error');
-      pwInfo_match.classList.remove('ok');
+      pwInfoMatch.classList.add('error');
+      pwInfoMatch.classList.remove('ok');
     } else {
-      pwInfo_match.classList.add('ok');
-      pwInfo_match.classList.remove('error');
+      pwInfoMatch.classList.add('ok');
+      pwInfoMatch.classList.remove('error');
     }
 
     if (pwContinuous(targetPw)) {
-      pwInfo_continuous.classList.add('error');
-      pwInfo_continuous.classList.remove('ok');
+      pwInfoContinuos.classList.add('error');
+      pwInfoContinuos.classList.remove('ok');
     } else {
-      pwInfo_continuous.classList.add('ok');
-      pwInfo_continuous.classList.remove('error');
+      pwInfoContinuos.classList.add('ok');
+      pwInfoContinuos.classList.remove('error');
     }
   }
 
-  const changePwMacth = (e) => {
+  const changePwMacth = (e,rePwInfo) => {
     const checkPw = e.target.value;
     setPwCheck(checkPw);
-    const RePwInfo = document.querySelector('ul.ReCheckPw li:nth-child(1)');
-
+    
     if (pw === checkPw) {
-      RePwInfo.classList.add('ok');
-      RePwInfo.classList.remove('error');
+      rePwInfo.classList.add('ok');
+      rePwInfo.classList.remove('error');
     } else {
-      RePwInfo.classList.add('error');
-      RePwInfo.classList.remove('ok');
+      rePwInfo.classList.add('error');
+      rePwInfo.classList.remove('ok');
     }
   }
 
-  const checkIdAPI = (id) => {
+  const checkIdAPI = (id,idInfo) => {
     
-  const idInfo = document.querySelector('ul.checkId li:nth-child(2)');
   const API = `http://dmsql5303.shop/api/v1/signup/username/${id}`;
     fetch(API).then((response) => response.json())
       .then((result) => {
@@ -178,9 +179,9 @@ const Signup = (props) => {
             <td>
               <Grid flex width="460px">
                 <Input placeholder="6자 이상의 영문 혹은 영문과 숫자를 조합" padding="14px" width="332px" _onClick={() => {
-                  document.querySelector('.checkId').style.display = 'block';
+                  idInfoUl.current.style.display = 'block';
                 }} _onChange={(e) => {
-                  changeId(e);
+                  changeId(e,idInfoOne.current);
                 }} />
                   <Button size="14px" bg="#ffffff" color="#5f0080" width="120px" padding="11px 14px" _onClick={() => {
 
@@ -188,12 +189,12 @@ const Signup = (props) => {
                       alert('아이디는 6자 이상의 영문 혹은 영문과 숫자 조합만 가능합니다.');
                       return false;
                     }
-                    checkIdAPI(id);
+                    checkIdAPI(id,idInfoTwo.current);
                   }}>중복확인</Button>
               </Grid>
-              <InfoUl className="checkId">
-                <li>· 6자 이상의 영문 혹은 영문과 숫자를 조합</li>
-                <li>· 아이디 중복확인</li>
+                <InfoUl className="checkId" ref={idInfoUl}>
+                <li ref={idInfoOne}>· 6자 이상의 영문 혹은 영문과 숫자를 조합</li>
+                <li ref={idInfoTwo}>· 아이디 중복확인</li>
               </InfoUl>   
             </td>
           </tr>
@@ -202,13 +203,13 @@ const Signup = (props) => {
             <td>
               <Grid flex>
                 <Input placeholder="비밀번호를 입력해주세요" type="password" padding="14px" width="332px" _onClick={() => {
-                  document.querySelector('.checkPw').style.display = 'block';
-                }} _onChange={(e) => { changePw(e) }}/>
+                  pwInfoUl.current.style.display = 'block';
+                }} _onChange={(e) => { changePw(e,pwInfoLen.current,pwInfoMatch.current,pwInfoContinuos.current) }}/>
               </Grid>
-              <InfoUl className="checkPw">
-                <li>·10글자 이상 입력</li>
-                <li>·영문/숫자/특수문자(공백 제외)만 허용,2개 이상의 조합</li>
-                <li>·동일한 숫자 3개 이상 연속 사용 불가</li>
+              <InfoUl className="checkPw" ref={pwInfoUl}>
+                <li ref={pwInfoLen}>·10글자 이상 입력</li>
+                <li ref={pwInfoMatch}>·영문/숫자/특수문자(공백 제외)만 허용,2개 이상의 조합</li>
+                <li ref={pwInfoContinuos}>·동일한 숫자 3개 이상 연속 사용 불가</li>
               </InfoUl>   
             </td>
           </tr>
@@ -217,11 +218,11 @@ const Signup = (props) => {
             <td>
               <Grid flex>
                 <Input placeholder="비밀번호를 한번 더 입력해주세요" type="password" padding="14px" width="332px" _onClick={() => {
-                  document.querySelector('.ReCheckPw').style.display = 'block';
-                }} _onChange={(e) => { changePwMacth(e) }}/>
+                  pwReInfoUl.current.style.display = 'block';
+                }} _onChange={(e) => { changePwMacth(e,pwInfoLi.current)}}/>
               </Grid>
-              <InfoUl className="ReCheckPw">
-                <li>·동일한 비밀번호를 입력해주세요.</li>
+              <InfoUl className="ReCheckPw" ref={pwReInfoUl}>
+              <li ref={pwInfoLi}>·동일한 비밀번호를 입력해주세요.</li>
               </InfoUl>   
             </td>
           </tr>

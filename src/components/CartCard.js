@@ -5,10 +5,11 @@ import { useDispatch } from 'react-redux';
 import { priceUnit } from '../shared/common';
 
 const CartCard = (props) => {
-  //수량세팅
+  
   const [count, setCount] = useState(props.productCount);
   const originalPrice = props.productPrice;
   const dispatch = useDispatch();
+
 
  
   return (
